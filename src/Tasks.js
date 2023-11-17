@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import TaskItem from './TaskItem';
 
 
 
@@ -9,33 +10,39 @@ async function getAllTasks() {
 }
 
 const Tasks = () => {
-  let isLoading = false;
-  let hasError = false;
+  let [isLoading, setIsLoading] = useState(false);
+  let [hasError, setHasError] = useState(false);
   let [tasks, setTasks] = useState([]);
 
   useEffect(() => {
+    setIsLoading(true);
     getAllTasks()
       .then((tasks) => {
         setTasks(tasks);
-        hasError = false;
+        setHasError(false);
       })
-      .catch((e) => hasError = true);
+      .catch((e) => {
+        setHasError(true);
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
   }, []);
 
   return (
     <>
-    <span className="form-control">
-      <input type="text"
-             placeholder="Введите текст для фильтра"
-      />
-    </span>
-    {
-      isLoading 
-      ? (<p>Загрузка...</p>) 
-      : hasError 
-        ? (<p>Ошибка запроса сервера</p>)
-        : tasks.map((task) => <p>{task.text}</p>)
-    }
+      <span className="form-control">
+        <input type="text"
+              placeholder="Введите текст для фильтра"
+        />
+      </span>
+      {
+        isLoading 
+        ? (<p>Загрузка...</p>) 
+        : hasError 
+          ? (<p>Ошибка запроса сервера</p>)
+          : tasks.map((task) => <TaskItem task={task}/>)
+      }
     </>
   )
 }
