@@ -29,6 +29,15 @@ const Tasks = () => {
       });
   }, []);
 
+  let items;
+  if (isLoading) { 
+    items = (<p>Загрузка...</p>); 
+  } else if (hasError) {
+    items = (<p>Ошибка запроса сервера</p>);
+  } else {
+    items = tasks.map((task) => <TaskItem task={task}/>);
+  }
+
   return (
     <>
       <span className="form-control">
@@ -36,13 +45,7 @@ const Tasks = () => {
               placeholder="Введите текст для фильтра"
         />
       </span>
-      {
-        isLoading 
-        ? (<p>Загрузка...</p>) 
-        : hasError 
-          ? (<p>Ошибка запроса сервера</p>)
-          : tasks.map((task) => <TaskItem task={task}/>)
-      }
+      {items}
     </>
   )
 }
