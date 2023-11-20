@@ -1,4 +1,8 @@
-import React, { useEffect, useState } from 'react'
+import React, {
+  Fragment,
+  useEffect,
+  useState
+} from 'react'
 import TaskItem from './TaskItem';
 
 
@@ -14,19 +18,17 @@ const Tasks = () => {
   let [hasError, setHasError] = useState(false);
   let [tasks, setTasks] = useState([]);
 
-  useEffect(() => {
+  useEffect(async () => {
     setIsLoading(true);
-    getAllTasks()
-      .then((tasks) => {
-        setTasks(tasks);
-        setHasError(false);
-      })
-      .catch((e) => {
-        setHasError(true);
-      })
-      .finally(() => {
-        setIsLoading(false);
-      });
+    try {
+      const tasks = await getAllTasks();
+      setTasks(tasks);
+      setHasError(false);
+    } catch(e) {
+      setHasError(true);
+    } finally {
+      setIsLoading(false);
+    }
   }, []);
 
   let items;
@@ -35,7 +37,9 @@ const Tasks = () => {
   } else if (hasError) {
     items = (<p>Ошибка запроса сервера</p>);
   } else {
-    items = tasks.map((task) => <TaskItem task={task}/>);
+    items = tasks.map((task) =>
+        <TaskItem key={task.id} task={task}/>
+    );
   }
 
   return (
