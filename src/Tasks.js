@@ -18,17 +18,19 @@ const Tasks = () => {
   let [hasError, setHasError] = useState(false);
   let [tasks, setTasks] = useState([]);
 
-  useEffect(async () => {
-    setIsLoading(true);
-    try {
-      const tasks = await getAllTasks();
-      setTasks(tasks);
-      setHasError(false);
-    } catch(e) {
-      setHasError(true);
-    } finally {
-      setIsLoading(false);
-    }
+  useEffect(() => {
+    ;(async () => {
+      setIsLoading(true);
+      try {
+        const tasks = await getAllTasks();
+        setTasks(tasks);
+        setHasError(false);
+      } catch(e) {
+        setHasError(true);
+      } finally {
+        setIsLoading(false);
+      }
+    })();
   }, []);
 
   let items;
