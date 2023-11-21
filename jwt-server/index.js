@@ -25,6 +25,24 @@ let allowCrossDomain = function(req, res, next) {
 }
 app.use(allowCrossDomain);
 
+function parseCookies (request) {
+  const list = {};
+  const cookieHeader = request.headers?.cookie;
+  if (!cookieHeader) return list;
+
+  cookieHeader.split(`;`).forEach(function(cookie) {
+      let [ name, ...rest] = cookie.split(`=`);
+      name = name?.trim();
+      if (!name) return;
+      const value = rest.join(`=`).trim();
+      if (!value) return;
+      list[name] = decodeURIComponent(value);
+  });
+
+  return list;
+}
+
+
 function generateAccessToken(username) {
     return jwt.sign(username, process.env.TOKEN_SECRET, { expiresIn: '1800s' });
 }
@@ -37,9 +55,34 @@ app.post('/api/login', async (req, res) => {
     console.log('Got body:', req.body);
     user = req.body;
     const token = generateAccessToken({ username: user.login });
+    res.set({'Set-Cookie': `token=${token}`});
     res.json({ token : token });
 });
 
+
+app.get('/api/refresh', async (req, res) => {
+  let cookies = parseCookies(req);
+  if (!cookies.token) {
+    res.status(401);
+    return;
+  }
+  if (cookies.token) {
+    console.log("cookies token = " + cookies.token);
+    try {
+      let user = jwt.verify(cookies.token, process.env.TOKEN_SECRET);
+      req.user = user;
+    } catch (err) {
+      console.log(err);
+      if (err) {
+        return res.sendStatus(403);
+      }
+    }
+  }
+
+  const token = generateAccessToken({ username: req.user });
+  res.set({'Set-Cookie': `token=${token}`});
+  res.json({ token : token });
+});
 
 
 function authenticateToken(req, res, next) {
@@ -55,7 +98,7 @@ function authenticateToken(req, res, next) {
     }
     req.user = user;
     next();
-  })
+  });
 }
   
 
