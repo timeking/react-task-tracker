@@ -8,9 +8,16 @@ const Login = () => {
 
 
   async function remoteLogin(login, password) {
-    const resp = await fetch("http://localhost:4000/api/login", {
-      method: "POST",
-      body: JSON.stringify({login, password})
+    let url = "http://localhost:4000/api/login";
+    let data = { login, password };
+    const resp = await fetch(url, {
+      method: "POST", // *GET, POST, PUT, DELETE, etc.
+      mode: 'no-cors', 
+      headers: {
+        "Content-Type": "application/json",
+        // 'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      body: JSON.stringify(data), // body data type must match "Content-Type" header
     });
     return await resp.json();
   }
@@ -18,11 +25,15 @@ const Login = () => {
   const onSubmit = (event, login, password) => {
     event.preventDefault();
 
-    remoteLogin().then((response) => {
+    remoteLogin(login, password).then((response) => {
       setResult(
         (<p>Попытка залогиниться '{login}' под паролем '{password}': {response}</p>)
       );
-    });
+    }).catch((e) => 
+      setResult(
+        (<p>Ошибка сервера:</p>)
+      )
+    );
 
   }
 
