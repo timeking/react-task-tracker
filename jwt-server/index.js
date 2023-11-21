@@ -59,8 +59,23 @@ function authenticateToken(req, res, next) {
 }
   
 
-app.get('/api/userOrders', authenticateToken, (req, res) => {
-    // executes after authenticateToken
-    // ...
+app.get('/api/tasks', authenticateToken, (req, res) => {
+  res.json([
+    {
+      "id": 2,
+      "text": "Встреча в школе",
+      "day": "2023-05-06T13:30"
+    },
+    {
+      "id": 3,
+      "text": "Поход в магазин",
+      "day": "2023-11-14T10:50"
+    },
+    {
+      "id": 4,
+      "text": "new task !!!",
+      "day": "2023-11-14T14:55"
+    }
+  ]);
 })
   

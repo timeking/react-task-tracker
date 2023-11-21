@@ -4,14 +4,7 @@ import React, {
   useState
 } from 'react'
 import TaskItem from './TaskItem';
-
-
-
-async function getAllTasks() {
-  var serverUrl = "http://localhost:3001";
-  let data = await fetch(`${serverUrl}/tasks`);
-  return await data.json() ?? [];
-}
+import taskService from './TaskService';
 
 const Tasks = () => {
   let [isLoading, setIsLoading] = useState(false);
@@ -22,7 +15,7 @@ const Tasks = () => {
     ;(async () => {
       setIsLoading(true);
       try {
-        const tasks = await getAllTasks();
+        const tasks = await taskService.getAllTasks();
         setTasks(tasks);
         setHasError(false);
       } catch(e) {
