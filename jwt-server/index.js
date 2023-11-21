@@ -18,6 +18,13 @@ app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)
 })
 
+let allowCrossDomain = function(req, res, next) {
+  res.header('Access-Control-Allow-Origin', "*");
+  res.header('Access-Control-Allow-Headers', "*");
+  next();
+}
+app.use(allowCrossDomain);
+
 function generateAccessToken(username) {
     return jwt.sign(username, process.env.TOKEN_SECRET, { expiresIn: '1800s' });
 }
@@ -34,21 +41,22 @@ app.post('/api/login', async (req, res) => {
 });
 
 
+
 function authenticateToken(req, res, next) {
-    const authHeader = req.headers['authorization'];
-    const token = authHeader && authHeader.split(' ')[1];
-  
-    if (token == null) return res.sendStatus(401);
-  
-    jwt.verify(token, process.env.TOKEN_SECRET, (err, user) => {
-      console.log(err);
-      if (err) {
-        return res.sendStatus(403);
-      }
-      req.user = user;
-      next();
-    })
-  }
+  const authHeader = req.headers['authorization'];
+  const token = authHeader && authHeader.split(' ')[1];
+
+  if (token == null) return res.sendStatus(401);
+
+  jwt.verify(token, process.env.TOKEN_SECRET, (err, user) => {
+    console.log(err);
+    if (err) {
+      return res.sendStatus(403);
+    }
+    req.user = user;
+    next();
+  })
+}
   
 
 app.get('/api/userOrders', authenticateToken, (req, res) => {

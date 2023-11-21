@@ -12,14 +12,14 @@ const Login = () => {
     let data = { login, password };
     const resp = await fetch(url, {
       method: "POST", // *GET, POST, PUT, DELETE, etc.
-      mode: 'no-cors', 
+      mode: 'cors',
       headers: {
-        "Content-Type": "application/json",
-        // 'Content-Type': 'application/x-www-form-urlencoded',
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
       },
       body: JSON.stringify(data), // body data type must match "Content-Type" header
     });
-    return await resp.json();
+    return await resp.json().token;
   }
 
   const onSubmit = (event, login, password) => {
