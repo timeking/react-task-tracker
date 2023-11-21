@@ -6,11 +6,24 @@ const Login = () => {
   const [password, setPassword] = useState("");
   const [result, setResult] = useState("");
 
+
+  async function remoteLogin(login, password) {
+    const resp = await fetch("http://localhost:4000/api/login", {
+      method: "POST",
+      body: JSON.stringify({login, password})
+    });
+    return await resp.json();
+  }
+
   const onSubmit = (event, login, password) => {
     event.preventDefault();
-    setResult(
-      (<p>Попытка залогиниться '{login}' под паролем '{password}'</p>)
-    );
+
+    remoteLogin().then((response) => {
+      setResult(
+        (<p>Попытка залогиниться '{login}' под паролем '{password}': {response}</p>)
+      );
+    });
+
   }
 
   return (
