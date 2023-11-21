@@ -1,4 +1,4 @@
-const url = "http://localhost:3001";
+import { url } from './api.config'
 
 const taskService = {
   getAllTasks : async () => {
@@ -6,6 +6,5 @@ const taskService = {
     return await data.json() ?? [];
   }
 }
-
 
 export default taskService;
