@@ -19,19 +19,21 @@ const Login = () => {
       },
       body: JSON.stringify(data), // body data type must match "Content-Type" header
     });
-    return await resp.json().token;
+    return await resp.json();
   }
 
   const onSubmit = (event, login, password) => {
     event.preventDefault();
 
     remoteLogin(login, password).then((response) => {
+      console.log(response);
+      console.log(response.token);
       setResult(
-        (<p>Попытка залогиниться '{login}' под паролем '{password}': {response}</p>)
+        (<p>Попытка залогиниться '{login}' под паролем '{password}': {response.token}</p>)
       );
     }).catch((e) => 
       setResult(
-        (<p>Ошибка сервера:</p>)
+        (<p>Ошибка сервера: {e}</p>)
       )
     );
 
