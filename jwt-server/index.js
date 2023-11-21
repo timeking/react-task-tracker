@@ -55,21 +55,22 @@ app.post('/api/login', async (req, res) => {
     console.log('Got body:', req.body);
     user = req.body;
     const token = generateAccessToken({ username: user.login });
-    res.set({'Set-Cookie': `token=${token}`});
-    res.json({ token : token });
+    res.set({'Set-Cookie': `refreshToken=${token}`});
+    res.json({ accessToken : token });
 });
 
 
 app.get('/api/refresh', async (req, res) => {
   let cookies = parseCookies(req);
-  if (!cookies.token) {
+  if (!cookies.refreshToken) {
     res.status(401);
     return;
   }
-  if (cookies.token) {
-    console.log("cookies token = " + cookies.token);
+  let refreshToken = cookies.refreshToken;
+  if (refreshToken) {
+    console.log("cookies refreshToken = " + refreshToken);
     try {
-      let user = jwt.verify(cookies.token, process.env.TOKEN_SECRET);
+      let user = jwt.verify(refreshToken, process.env.TOKEN_SECRET);
       req.user = user;
     } catch (err) {
       console.log(err);
@@ -80,8 +81,8 @@ app.get('/api/refresh', async (req, res) => {
   }
 
   const token = generateAccessToken({ username: req.user });
-  res.set({'Set-Cookie': `token=${token}`});
-  res.json({ token : token });
+  res.set({'Set-Cookie': `refreshToken=${token}`});
+  res.json({ accessToken : token });
 });
 
 

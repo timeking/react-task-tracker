@@ -26,9 +26,9 @@ const Login = () => {
     event.preventDefault();
 
     remoteLogin(login, password).then((response) => {
-      localStorage.setItem("token", response.token);
+      localStorage.setItem("token", response.accessToken);
       setResult(
-        (<p>Попытка залогиниться '{login}' под паролем '{password}': {response.token}</p>)
+        (<p>Попытка залогиниться '{login}' под паролем '{password}': {response.accessToken}</p>)
       );
     }).catch((e) => 
       setResult(
