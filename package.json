@@ -7,6 +7,8 @@
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
     "axios": "^1.6.2",
+    "mobx": "^6.11.0",
+    "mobx-react-lite": "^4.0.5",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.19.0",
@@ -19,7 +21,7 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "json-server": "json-server --watch db.json --port 3001",
-    "jwt-server": "cd jwt-server && npm install && node index.js"
+    "jwt-server": "cd jwt-server && npm install && node --watch index.js"
   },
   "eslintConfig": {
     "extends": [

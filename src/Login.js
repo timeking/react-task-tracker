@@ -1,35 +1,25 @@
 import React, { useState } from 'react'
+import {observer} from "mobx-react-lite";
+import authStore from "./AuthStore";
+import {useNavigate} from "react-router-dom";
 
 
 const Login = () => {
   const [login, setLogin] = useState("");
   const [password, setPassword] = useState("");
   const [result, setResult] = useState("");
-
-
-  async function remoteLogin(login, password) {
-    let url = "http://localhost:4000/api/login";
-    let data = { login, password };
-    const resp = await fetch(url, {
-      method: "POST", // *GET, POST, PUT, DELETE, etc.
-      mode: 'cors',
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(data), // body data type must match "Content-Type" header
-    });
-    return await resp.json();
-  }
+  const navigate = useNavigate();
 
   const onSubmit = (event, login, password) => {
     event.preventDefault();
-
-    remoteLogin(login, password).then((response) => {
-      localStorage.setItem("token", response.accessToken);
+    authStore.login(login, password).then((response) => {
+      console.log(response);
       setResult(
-        (<p>Попытка залогиниться '{login}' под паролем '{password}': {response.accessToken}</p>)
+        (<>
+          <p>Авторизация успешна</p>
+        </>)
       );
+      navigate("/");
     }).catch((e) => 
       setResult(
         (<p>Ошибка сервера: {e}</p>)
@@ -64,4 +54,4 @@ const Login = () => {
   )
 }
 
-export default Login
+export default observer(Login)

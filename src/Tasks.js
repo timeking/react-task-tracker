@@ -4,7 +4,13 @@ import React, {
   useState
 } from 'react'
 import TaskItem from './TaskItem';
-import taskService from './TaskService';
+import TaskService from './TaskService';
+
+
+export async function loader() {
+  const tasks = await TaskService.getAllTasks();
+  return { tasks };
+}
 
 const Tasks = () => {
   let [isLoading, setIsLoading] = useState(false);
@@ -15,7 +21,7 @@ const Tasks = () => {
     ;(async () => {
       setIsLoading(true);
       try {
-        const tasks = await taskService.getAllTasks();
+        const tasks = await TaskService.getAllTasks();
         setTasks(tasks);
         setHasError(false);
       } catch(e) {

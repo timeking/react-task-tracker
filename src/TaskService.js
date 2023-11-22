@@ -1,10 +1,9 @@
-import { url } from './api.config'
+import { instance } from './api.config'
 
-const taskService = {
-  getAllTasks : async () => {
-    let data = await fetch(`${url}/tasks`);
-    return await data.json() ?? [];
+const TaskService = {
+  getAllTasks: async () => {
+    return await instance.get("/api/tasks");
   }
 }
 
-export default taskService;
+export default TaskService;
