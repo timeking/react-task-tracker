@@ -100,8 +100,8 @@ function authenticateToken(req, res, next) {
   }
 
   jwt.verify(token, process.env.TOKEN_SECRET, (err, user) => {
-    console.log("Ошибка jwt", err);
     if (err) {
+      console.log("Ошибка jwt", err);
       return res.sendStatus(403);
     }
     req.user = user;
