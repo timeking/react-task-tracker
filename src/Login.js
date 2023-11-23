@@ -1,7 +1,7 @@
-import React, { useState } from 'react'
+import React, {useEffect, useState} from 'react'
 import {observer} from "mobx-react-lite";
 import authStore from "./AuthStore";
-import {useNavigate} from "react-router-dom";
+import {Navigate, useNavigate} from "react-router-dom";
 
 
 const Login = () => {
@@ -25,7 +25,10 @@ const Login = () => {
         (<p>Ошибка сервера: {e}</p>)
       )
     );
+  }
 
+  if (authStore.isAuth) {
+      return (<Navigate to="/"/>);
   }
 
   return (

@@ -35,7 +35,7 @@ function parseCookies(request) {
     console.log("no cookie header");
     return list;
   }
-  console.log("header: " + JSON.stringify(cookieHeader));
+  //console.log("header: " + JSON.stringify(cookieHeader));
 
   cookieHeader.split(`;`).forEach(function (cookie) {
     let [name, ...rest] = cookie.split(`=`);
@@ -45,7 +45,6 @@ function parseCookies(request) {
     if (!value) return;
     list[name] = decodeURIComponent(value);
   });
-  console.log(list);
 
   return list;
 }
@@ -77,7 +76,7 @@ app.get('/api/refresh', async (req, res) => {
     res.status(401).send('No cookie was set!');
     return;
   }
-  console.log("cookies refreshToken = " + refreshToken);
+  // console.log("cookies refreshToken = " + refreshToken);
   try {
     req.user = jwt.verify(refreshToken, process.env.TOKEN_SECRET);
   } catch (err) {
@@ -93,10 +92,12 @@ app.get('/api/refresh', async (req, res) => {
 
 
 function authenticateToken(req, res, next) {
-  const authHeader = req.headers['Authorization'];
+  const authHeader = req.headers['authorization'];
   const token = authHeader && authHeader.split(' ')[1];
 
-  if (token == null) return res.sendStatus(401);
+  if (token == null) {
+    return res.sendStatus(401);
+  }
 
   jwt.verify(token, process.env.TOKEN_SECRET, (err, user) => {
     console.log("Ошибка jwt", err);

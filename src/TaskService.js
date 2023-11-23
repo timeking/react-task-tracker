@@ -2,7 +2,8 @@ import { instance } from './api.config'
 
 const TaskService = {
   getAllTasks: async () => {
-    return await instance.get("/api/tasks");
+    const resp = await instance.get("/api/tasks");
+    return resp.data;
   }
 }
 

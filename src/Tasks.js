@@ -38,6 +38,7 @@ const Tasks = () => {
   } else if (hasError) {
     items = (<p>Ошибка запроса сервера</p>);
   } else {
+    console.log(tasks);
     items = tasks.map((task) =>
         <TaskItem key={task.id} task={task}/>
     );

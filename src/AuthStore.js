@@ -16,6 +16,7 @@ class AuthStore {
       const resp = await AuthService.login(login, password);
       localStorage.setItem("token", resp.data.accessToken);
       this.isAuth = true;
+      console.log("login authorized");
     } catch (err) {
       console.log("login error", err);
     } finally {
@@ -30,6 +31,7 @@ class AuthStore {
       const resp = await AuthService.refreshToken();
       localStorage.setItem("token", resp.data.accessToken);
       this.isAuth = true;
+      console.log("authorized");
     } catch (err) {
       console.log("login error", err);
     } finally {
